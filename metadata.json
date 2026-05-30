@@ -1,0 +1,10 @@
+{
+  "name": "Alma del Bosque",
+  "description": "Premium Patagonian cabin rental website in Bariloche, Argentina, featuring elegant dark aesthetics, real-time booking widgets, gallery lightboxes, and modern experiences mapping.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

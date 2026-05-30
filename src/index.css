@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --color-wood-50: #fbfaf6;
+  --color-wood-100: #f5f0df;
+  --color-wood-200: #e8dbb8;
+  --color-wood-300: #d7bc82;
+  --color-wood-400: #c19a6b;
+  --color-wood-450: #c19a6b;
+  --color-wood-500: #d4af37;
+  --color-wood-600: #b59025;
+  --color-wood-700: #8b5e3c;
+  --color-wood-800: #6d472b;
+  --color-wood-900: #50321c;
+  --color-wood-950: #291a0c;
+
+  /* Natural Tones - Patagonian Forest Greens */
+  --color-forest-50: #f2faf3;
+  --color-forest-100: #e1f3e4;
+  --color-forest-200: #c1e6c7;
+  --color-forest-300: #93d09e;
+  --color-forest-400: #5fae6c;
+  --color-forest-500: #2d5a27;
+  --color-forest-600: #21431d;
+  --color-forest-700: #1b3022;
+  --color-forest-800: #15241b;
+  --color-forest-900: #101c15;
+  --color-forest-950: #0a110d;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: #0A0A0A;
+    color: #FFFFFF;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  section {
+    scroll-margin-top: 92px;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  a {
+    outline-color: #d4af37;
+    outline-offset: 2px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb {
+  background: #252525;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+.glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.35);
+}
+
+.wood-border {
+  border: 1px solid rgba(212, 175, 55, 0.26);
+}
+
+.forest-border {
+  border: 1px solid rgba(45, 90, 39, 0.5);
+}
+
+.soft-shadow {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 1024px) {
+  .parallax-bg {
+    background-attachment: scroll;
+  }
+}
+
+@keyframes subtle-zoom {
+  0% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-subtle-zoom {
+  animation: subtle-zoom 18s ease-in-out infinite alternate;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out both;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
