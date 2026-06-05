@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CABINS_DATA } from "../data";
 import { Calendar, Briefcase, FileText, CheckCircle2, ArrowRight, Loader2, AlertCircle } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { useLanguage } from "../i18n/LanguageContext";
 
 interface BookingFormProps {
@@ -66,6 +66,12 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
     // Generate a unique reference code
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const formattedCode = `ALMA-2026-${randomNum}`;
+
+    if (!isSupabaseConfigured || !supabase) {
+      setIsLoading(false);
+      setSubmitError(t.booking.submitError);
+      return;
+    }
 
     const { error } = await supabase.from("bookings").insert({
       full_name: fullName,

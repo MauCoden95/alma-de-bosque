@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MapPin, Phone, Mail, Instagram, Facebook, MessageCircle, Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Contact() {
@@ -16,6 +16,12 @@ export default function Contact() {
     e.preventDefault();
     setIsLoading(true);
     setSendError(null);
+
+    if (!isSupabaseConfigured || !supabase) {
+      setIsLoading(false);
+      setSendError(t.contact.errorMsg);
+      return;
+    }
 
     const { error } = await supabase.from("contact_messages").insert({
       name,
