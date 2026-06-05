@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Calendar, Users, ArrowRight } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface HeroProps {
   onNavigate: (sectionId: string) => void;
@@ -10,6 +11,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(2);
+  const { t } = useLanguage();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +45,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
         {/* Animated Accent badge */}
         <div className="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-950/70 border border-forest-500/30 text-forest-300 backdrop-blur-md text-xs tracking-[0.25em] font-mono uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-wood-400 animate-ping" />
-          Exclusive Sanctuary
+          {t.hero.badge}
         </div>
 
         {/* Headline */}
@@ -51,19 +53,15 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
           id="hero-title"
           className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-6 text-shadow"
         >
-          Alma del Bosque
+          {t.hero.title}
         </h1>
 
         {/* Subheadlines */}
         <p
           id="hero-subtitle"
-          className="text-lg md:text-2xl font-serif text-wood-400 italic max-w-3xl mb-4"
+          className="text-lg md:text-2xl font-serif text-wood-400 italic max-w-3xl mb-10 leading-relaxed"
         >
-          Cabins immersed in the Patagonian forest of Bariloche
-        </p>
-        
-        <p className="text-zinc-300 text-sm md:text-base max-w-2xl font-sans leading-relaxed mb-10 text-shadow-sm">
-          Disconnect from routine and reconnect with nature in a unique retreat surrounded by ancient forests and majestic mountains.
+          {t.hero.subtitle}
         </p>
 
         {/* Hero CTA Buttons */}
@@ -73,14 +71,14 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
             onClick={() => onNavigate("booking")}
             className="px-8 py-4 bg-wood-500 hover:bg-wood-400 text-black font-semibold tracking-wider uppercase text-xs rounded-md transition-all duration-300 shadow-lg shadow-wood-500/20 transform hover:-translate-y-0.5 cursor-pointer"
           >
-            Book Your Stay
+            {t.nav.book}
           </button>
           <button
             id="hero-btn-cabins"
             onClick={() => onNavigate("cabins")}
             className="px-8 py-4 bg-transparent hover:bg-white/10 text-white font-semibold tracking-wider uppercase text-xs rounded-md border border-white/20 hover:border-white/40 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
           >
-            View Cabins
+            {t.hero.exploreBtn}
           </button>
         </div>
 
@@ -93,7 +91,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
             {/* Check in */}
             <div className="flex flex-col">
               <label htmlFor="widget-checkin" className="text-[10px] tracking-widest font-mono text-wood-500 uppercase mb-2 flex items-center gap-1.5 font-semibold">
-                <Calendar size={12} className="text-wood-400" /> Check-In Date
+                <Calendar size={12} className="text-wood-400" /> {t.hero.checkIn}
               </label>
               <input
                 id="widget-checkin"
@@ -108,7 +106,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
             {/* Check out */}
             <div className="flex flex-col">
               <label htmlFor="widget-checkout" className="text-[10px] tracking-widest font-mono text-wood-500 uppercase mb-2 flex items-center gap-1.5 font-semibold">
-                <Calendar size={12} className="text-wood-400" /> Check-Out Date
+                <Calendar size={12} className="text-wood-400" /> {t.hero.checkOut}
               </label>
               <input
                 id="widget-checkout"
@@ -123,7 +121,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
             {/* Guests */}
             <div className="flex flex-col">
               <label htmlFor="widget-guests" className="text-[10px] tracking-widest font-mono text-wood-500 uppercase mb-2 flex items-center gap-1.5 font-semibold">
-                <Users size={12} className="text-wood-400" /> Guests Count
+                <Users size={12} className="text-wood-400" /> {t.hero.guests}
               </label>
               <select
                 id="widget-guests"
@@ -133,7 +131,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                   <option key={num} value={num} className="bg-zinc-900 text-white">
-                    {num} {num === 1 ? "Guest" : "Guests"}
+                    {num} {num === 1 ? t.booking.guest : t.booking.guests}
                   </option>
                 ))}
               </select>
@@ -146,7 +144,7 @@ export default function Hero({ onNavigate, onSearchStay }: HeroProps) {
                 type="submit"
                 className="w-full bg-wood-700 hover:bg-wood-800 text-white font-semibold text-xs uppercase tracking-widest py-3.5 px-4 rounded-md transition-colors flex items-center justify-center gap-2 group cursor-pointer"
               >
-                Check Availability
+                {t.hero.searchBtn}
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

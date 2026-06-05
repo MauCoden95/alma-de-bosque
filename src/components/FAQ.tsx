@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { FAQS_DATA } from "../data";
-import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function FAQ() {
   const [openId, setOpenId] = useState<string | null>("faq-1"); // keep first one open by default
+  const { t } = useLanguage();
 
   const toggleAccordion = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -16,13 +18,13 @@ export default function FAQ() {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase block mb-3">
-            Questions & Answers
+            {t.faq.badge}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            Frequently Asked Questions
+            {t.faq.title}
           </h2>
           <p className="text-zinc-400 font-sans text-sm md:text-base">
-            Everything you need to know about preparing your elite woodside stay, seasonal conditions, and booking guidelines.
+            {t.faq.subtitle}
           </p>
         </div>
 
@@ -30,6 +32,8 @@ export default function FAQ() {
         <div id="faq-accordion-list" className="space-y-4">
           {FAQS_DATA.map((faq) => {
             const isOpen = openId === faq.id;
+            const translatedFaq = t.faq.data[faq.id];
+            const translatedCategory = t.faq.categories[faq.category] || faq.category;
             return (
               <div
                 key={faq.id}
@@ -45,7 +49,7 @@ export default function FAQ() {
                   <div className="flex items-center gap-4">
                     <HelpCircle size={18} className="text-wood-550 group-hover:scale-105 transition-transform" />
                     <span className="font-serif text-sm md:text-base font-semibold text-white leading-snug">
-                      {faq.question}
+                      {translatedFaq?.question || faq.question}
                     </span>
                   </div>
                   
@@ -65,9 +69,9 @@ export default function FAQ() {
                 >
                   <div className="p-6 text-xs md:text-sm text-zinc-450 leading-relaxed font-sans bg-zinc-950/20">
                     <p className="mb-2 uppercase text-[9px] font-mono tracking-wider text-wood-500">
-                      Category: {faq.category} · Alma del Bosque Policy
+                      {t.faq.categoryPrefix}: {translatedCategory} · {t.faq.policyTitle}
                     </p>
-                    {faq.answer}
+                    {translatedFaq?.answer || faq.answer}
                   </div>
                 </div>
 

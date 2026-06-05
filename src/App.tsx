@@ -12,6 +12,7 @@ import FAQ from "./components/FAQ";
 import BookingForm from "./components/BookingForm";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import { LanguageProvider } from "./i18n/LanguageContext";
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("home");
@@ -116,31 +117,33 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-wood-500 selection:text-black">
-      <a
-        href="#home"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-white focus:wood-border"
-      >
-        Skip to main content
-      </a>
+    <LanguageProvider>
+      <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-wood-500 selection:text-black">
+        <a
+          href="#home"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-white focus:wood-border"
+        >
+          Skip to main content
+        </a>
 
-      <Navbar onNavigate={handleNavigate} activeSection={activeSection} />
+        <Navbar onNavigate={handleNavigate} activeSection={activeSection} />
 
-      <main id="main-content">
-        <Hero onNavigate={handleNavigate} onSearchStay={handleSearchStay} />
-        <About />
-        <Cabins onSelectCabin={handleSelectCabin} onNavigate={handleNavigate} />
-        <Amenities />
-        <Gallery />
-        <Experiences />
-        <Testimonials />
-        <InteractiveMap />
-        <FAQ />
-        <BookingForm prefilledParams={bookingPrefills} onClearPrefills={handleClearPrefills} />
-        <Contact />
-      </main>
+        <main id="main-content">
+          <Hero onNavigate={handleNavigate} onSearchStay={handleSearchStay} />
+          <About />
+          <Cabins onSelectCabin={handleSelectCabin} onNavigate={handleNavigate} />
+          <Amenities />
+          <Gallery />
+          <Experiences />
+          <Testimonials />
+          <InteractiveMap />
+          <FAQ />
+          <BookingForm prefilledParams={bookingPrefills} onClearPrefills={handleClearPrefills} />
+          <Contact />
+        </main>
 
-      <Footer onNavigate={handleNavigate} />
-    </div>
+        <Footer onNavigate={handleNavigate} />
+      </div>
+    </LanguageProvider>
   );
 }

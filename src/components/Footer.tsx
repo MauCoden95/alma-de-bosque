@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Mail, Instagram, Facebook, Compass, CheckCircle2 } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
 }
 
 export default function Footer({ onNavigate }: FooterProps) {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -18,24 +20,22 @@ export default function Footer({ onNavigate }: FooterProps) {
   };
 
   const navLinks = [
-    { label: "Home", id: "home" },
-    { label: "Cabins", id: "cabins" },
-    { label: "Amenities", id: "amenities" },
-    { label: "Gallery", id: "gallery" },
-    { label: "Experiences", id: "experiences" },
-    { label: "Reviews", id: "reviews" },
-    { label: "FAQ", id: "faq" },
-    { label: "Contact", id: "contact" }
+    { label: t.nav.home, id: "home" },
+    { label: t.nav.cabins, id: "cabins" },
+    { label: t.nav.amenities, id: "amenities" },
+    { label: t.nav.gallery, id: "gallery" },
+    { label: t.nav.experiences, id: "experiences" },
+    { label: t.nav.reviews, id: "reviews" },
+    { label: t.nav.faq, id: "faq" },
+    { label: t.nav.contact, id: "contact" }
   ];
 
   return (
     <footer id="main-footer" className="bg-[#050505] border-t border-zinc-900 pt-16 pb-8 text-zinc-400 relative">
       <div className="max-w-7xl mx-auto px-6">
         
-        {/* Core footer columns */}
         <div id="footer-columns-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-12 border-b border-zinc-900">
           
-          {/* Brand Col */}
           <div className="lg:col-span-4 space-y-4">
             <button
               onClick={() => onNavigate("home")}
@@ -49,13 +49,12 @@ export default function Footer({ onNavigate }: FooterProps) {
               </span>
             </button>
             <p className="text-xs leading-relaxed max-w-sm font-sans pt-2">
-              An exclusive boutique refuge tucked deep inside Circuito Chico woodlands. Experience the sheer beauty of Argentine Patagonia surrounded by forests, lakes, and Andean peaks.
+              {t.footer.desc}
             </p>
           </div>
 
-          {/* Navigation Links Col */}
           <div className="lg:col-span-3 space-y-4">
-            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">Explore</span>
+            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">{t.footer.explore}</span>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
               {navLinks.map((link) => (
                 <button
@@ -70,9 +69,8 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Social connections */}
           <div className="lg:col-span-2 space-y-4">
-            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">Social</span>
+            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">{t.footer.social}</span>
             <div className="flex flex-col space-y-2.5 text-xs">
               <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Instagram size={13} className="text-wood-450" /> Instagram
@@ -86,17 +84,16 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Newsletter subscription Col */}
           <div className="lg:col-span-3 space-y-4">
-            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">Newsletter</span>
+            <span className="text-xs uppercase font-mono tracking-widest text-[#888] block">{t.footer.newsletter}</span>
             <p className="text-xs leading-relaxed font-sans">
-              Subscribe to unlock periodic private offers, mountain snow season updates, and direct booking perks.
+              {t.footer.newsletterDesc}
             </p>
 
             {isSubscribed ? (
               <div id="newsletter-success" className="bg-[#122116]/80 border border-forest-500/30 p-3 rounded-lg flex items-center gap-2.5 text-xs text-forest-300 animate-fade-in">
                 <CheckCircle2 size={15} />
-                <span>Thank you! You are subscribed.</span>
+                <span>{t.footer.newsletterSuccess}</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex gap-2">
@@ -104,7 +101,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                   id="newsletter-email"
                   type="email"
                   required
-                  placeholder="Enter email..."
+                  placeholder={t.footer.newsletterPlaceholder}
                   className="bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-wood-500 max-w-[170px] w-full flex-grow transition-colors"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -114,7 +111,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                   type="submit"
                   className="bg-wood-500 hover:bg-wood-400 text-black font-semibold text-[10px] tracking-wider uppercase px-3.5 py-2 rounded transition-all duration-300 flex items-center gap-1 cursor-pointer hover:scale-105"
                 >
-                  <Mail size={12} /> Subscribe
+                  <Mail size={12} /> {t.footer.subscribeBtn}
                 </button>
               </form>
             )}
@@ -122,23 +119,20 @@ export default function Footer({ onNavigate }: FooterProps) {
 
         </div>
 
-        {/* Lower disclosures bottom row */}
         <div id="footer-bottom" className="flex flex-col md:flex-row items-center justify-between pt-8 text-[11px] text-zinc-500 space-y-4 md:space-y-0">
           
-          {/* Legal references */}
           <div className="flex gap-4 font-sans flex-wrap justify-center">
-            <span className="hover:text-zinc-400 cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-zinc-400 cursor-pointer">{t.footer.privacy}</span>
             <span className="text-zinc-800">•</span>
-            <span className="hover:text-zinc-400 cursor-pointer">Terms of Service</span>
+            <span className="hover:text-zinc-400 cursor-pointer">{t.footer.terms}</span>
             <span className="text-zinc-800">•</span>
-            <span className="hover:text-zinc-400 cursor-pointer">Booking Conditions</span>
+            <span className="hover:text-zinc-400 cursor-pointer">{t.footer.bookingConditions}</span>
             <span className="text-zinc-800">•</span>
-            <span className="hover:text-zinc-400 cursor-pointer">Local Regulations</span>
+            <span className="hover:text-zinc-400 cursor-pointer">{t.footer.localRegulations}</span>
           </div>
 
-          {/* Main Copyright Text */}
           <span id="footer-copyright" className="font-mono tracking-wider text-center md:text-right uppercase text-[9px] text-[#777]">
-            © 2026 Alma del Bosque – Bariloche, Patagonia Argentina
+            {t.footer.copyright}
           </span>
         </div>
 

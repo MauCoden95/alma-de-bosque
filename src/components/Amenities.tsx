@@ -1,7 +1,10 @@
 import { AMENITIES_DATA } from "../data";
 import IconMapper from "./IconMapper";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Amenities() {
+  const { t } = useLanguage();
+
   return (
     <section id="amenities" className="py-24 bg-[#0A0A0A] border-b border-wood-950/20 relative overflow-hidden">
       {/* Decorative Forest Glow */}
@@ -12,13 +15,13 @@ export default function Amenities() {
         {/* Section Title */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase block mb-3">
-            Pure Patagonian Comfort
+            {t.amenities.badge}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            World-Class Amenities
+            {t.amenities.title}
           </h2>
           <p className="text-zinc-400 font-sans text-sm md:text-base">
-            Equipped with modern elite technology, premium natural details, and personalized boutique services to guarantee absolute peace.
+            {t.amenities.subtitle}
           </p>
         </div>
 
@@ -40,12 +43,12 @@ export default function Amenities() {
 
               {/* Title */}
               <h3 className="font-serif text-lg font-medium text-white mb-2 group-hover:text-wood-400 transition-colors">
-                {amenity.title}
+                {t.amenities.data[amenity.id]?.title || amenity.title}
               </h3>
 
               {/* Description */}
               <p className="text-zinc-400 text-xs leading-relaxed font-sans">
-                {amenity.description}
+                {t.amenities.data[amenity.id]?.description || amenity.description}
               </p>
             </div>
           ))}

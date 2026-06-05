@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSwitcher from "../i18n/LanguageSwitcher";
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -9,6 +11,7 @@ interface NavbarProps {
 export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,14 +26,14 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
   }, []);
 
   const menuItems = [
-    { label: "Home", id: "home" },
-    { label: "Cabins", id: "cabins" },
-    { label: "Amenities", id: "amenities" },
-    { label: "Gallery", id: "gallery" },
-    { label: "Experiences", id: "experiences" },
-    { label: "Reviews", id: "reviews" },
-    { label: "FAQ", id: "faq" },
-    { label: "Contact", id: "contact" }
+    { label: t.nav.home, id: "home" },
+    { label: t.nav.cabins, id: "cabins" },
+    { label: t.nav.amenities, id: "amenities" },
+    { label: t.nav.gallery, id: "gallery" },
+    { label: t.nav.experiences, id: "experiences" },
+    { label: t.nav.reviews, id: "reviews" },
+    { label: t.nav.faq, id: "faq" },
+    { label: t.nav.contact, id: "contact" }
   ];
 
   const handleLinkClick = (id: string) => {
@@ -91,8 +94,10 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
             onClick={() => handleLinkClick("booking")}
             className="ml-4 px-5 py-2 text-[11px] font-semibold uppercase tracking-widest border border-wood-500 text-wood-500 rounded bg-transparent hover:bg-wood-500 hover:text-black transition-all duration-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-wood-500/20 cursor-pointer"
           >
-            Book Your Stay
+            {t.nav.book}
           </button>
+
+          <LanguageSwitcher />
         </div>
 
         {/* Mobile Hamburger Toggle */}
@@ -128,7 +133,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
         >
           <div className="flex flex-col space-y-2 pt-6">
             <span className="text-xs tracking-[0.2em] text-wood-500 uppercase font-mono border-b border-wood-800/20 pb-2">
-              Menu Navigation
+              {t.nav.menu}
             </span>
             {menuItems.map((item) => (
               <button
@@ -150,8 +155,17 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
               onClick={() => handleLinkClick("booking")}
               className="mt-6 w-full py-3.5 text-center text-sm font-semibold uppercase tracking-widest border border-wood-500 text-wood-500 rounded bg-transparent hover:bg-wood-500 hover:text-black transition-colors cursor-pointer"
             >
-              Book Your Stay
+              {t.nav.book}
             </button>
+
+            {/* Language Selector in Mobile Drawer */}
+            <span className="text-xs tracking-[0.2em] text-wood-500 uppercase font-mono border-b border-wood-800/20 pb-2 mt-6">
+              {t.nav.language}
+            </span>
+            <LanguageSwitcher
+              variant="mobile"
+              onSelect={() => setIsMobileMenuOpen(false)}
+            />
           </div>
         </div>
       </div>

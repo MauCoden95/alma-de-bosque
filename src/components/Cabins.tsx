@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CABINS_DATA } from "../data";
 import { Users, Maximize, ArrowRight, Star } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface CabinsProps {
   onSelectCabin: (cabinId: string) => void;
@@ -9,6 +10,7 @@ interface CabinsProps {
 
 export default function Cabins({ onSelectCabin, onNavigate }: CabinsProps) {
   const [filter, setFilter] = useState("all"); // "all", "couples", "families"
+  const { t } = useLanguage();
 
   const filteredCabins = CABINS_DATA.filter((cabin) => {
     if (filter === "couples") return cabin.capacity <= 2;
@@ -28,21 +30,21 @@ export default function Cabins({ onSelectCabin, onNavigate }: CabinsProps) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase block mb-3">
-            Lodging Collections
+            {t.cabins.badge}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            Our Featured Cabins
+            {t.cabins.title}
           </h2>
           <p className="text-zinc-400 font-sans text-sm md:text-base">
-            Every lodge is designed as an architectural response to the woods. Indulge in premium native materials, absolute comfort, and infinite alpine scenery.
+            {t.cabins.subtitle}
           </p>
 
           {/* Elegant Cabin Filters */}
           <div className="flex justify-center gap-2 mt-8">
             {[
-              { label: "All Cabins", value: "all" },
-              { label: "Couples & Suites", value: "couples" },
-              { label: "Family & Lodges", value: "families" }
+              { label: t.cabins.filterAll, value: "all" },
+              { label: t.cabins.filterCouples, value: "couples" },
+              { label: t.cabins.filterFamilies, value: "families" }
             ].map((tab) => (
               <button
                 key={tab.value}
@@ -85,7 +87,7 @@ export default function Cabins({ onSelectCabin, onNavigate }: CabinsProps) {
                 {/* Price Badge */}
                 <div className="absolute bottom-4 right-4 bg-black/85 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-wood-800/20">
                   <span className="block font-serif text-lg font-bold text-white">${cabin.price}</span>
-                  <span className="block text-[8px] tracking-widest uppercase font-mono text-zinc-400 mt-0.5 text-right">per night</span>
+                  <span className="block text-[8px] tracking-widest uppercase font-mono text-zinc-400 mt-0.5 text-right">{t.cabins.perNight}</span>
                 </div>
 
                 {/* Rating badge */}
@@ -104,32 +106,50 @@ export default function Cabins({ onSelectCabin, onNavigate }: CabinsProps) {
                   </h3>
                   <div className="flex items-center gap-3 text-zinc-400 text-xs font-mono">
                     <span className="flex items-center gap-1.5">
-                      <Users size={13} className="text-wood-500" /> up to {cabin.capacity}
+                      <Users size={13} className="text-wood-500" /> {cabin.capacity} {t.cabins.capacity}
                     </span>
                     <span className="w-1 h-1 rounded-full bg-zinc-700" />
                     <span className="flex items-center gap-1.5">
-                      <Maximize size={13} className="text-wood-500" /> {cabin.size}m²
+                      <Maximize size={13} className="text-wood-500" /> {cabin.size}{t.cabins.size}
                     </span>
                   </div>
                 </div>
 
                 {/* Description */}
                 <p className="text-zinc-400 text-xs font-sans leading-relaxed flex-grow mb-5">
-                  {cabin.description}
+                  {t.cabins.data[cabin.id]?.description || cabin.description}
                 </p>
 
                 {/* Amenities Badges / Previews */}
                 <div className="mb-6">
-                  <span className="text-[9px] tracking-widest font-mono uppercase text-zinc-500 block mb-2">Featured Amenities</span>
+                  <span className="text-[9px] tracking-widest font-mono uppercase text-zinc-500 block mb-2">{t.cabins.featuredAmenities}</span>
                   <div className="flex flex-wrap gap-1.5">
-                    {cabin.amenities.map((amenity) => (
-                      <span
-                        key={amenity}
-                        className="px-2.5 py-1 rounded bg-[#101010] border border-zinc-850 text-[10px] text-zinc-300 font-sans tracking-wide"
-                      >
-                        {amenity}
-                      </span>
-                    ))}
+                    {cabin.amenities.map((amenity) => {
+                      const amenityKeyMap: Record<string, string> = {
+                        "High-speed Wi-Fi": "wifi",
+                        "Private parking": "parking",
+                        "Fireplace": "fireplace",
+                        "Full kitchen": "kitchen",
+                        "BBQ area": "bbq",
+                        "Smart TV": "tv",
+                        "Mountain views": "views",
+                        "Hot tub": "hottub",
+                        "Heating": "heating",
+                        "Pet-friendly cabins": "petfriendly",
+                        "Breakfast service": "breakfast",
+                        "Housekeeping": "housekeeping"
+                      };
+                      const key = amenityKeyMap[amenity];
+                      const translatedAmenity = key && t.amenities.data[key] ? t.amenities.data[key].title : amenity;
+                      return (
+                        <span
+                          key={amenity}
+                          className="px-2.5 py-1 rounded bg-[#101010] border border-zinc-850 text-[10px] text-zinc-300 font-sans tracking-wide"
+                        >
+                          {translatedAmenity}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -139,7 +159,7 @@ export default function Cabins({ onSelectCabin, onNavigate }: CabinsProps) {
                   onClick={() => handleBookNow(cabin.id)}
                   className="w-full mt-auto py-3 bg-transparent border border-wood-700 hover:border-wood-500 text-wood-400 hover:text-white hover:bg-wood-700/80 transition-all duration-300 rounded-lg text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  Book this Cabin
+                  {t.cabins.bookBtn}
                   <ArrowRight size={13} className="text-wood-400 group-hover:translate-x-1.5 transition-all text-wood-400 group-hover:text-white" />
                 </button>
               </div>

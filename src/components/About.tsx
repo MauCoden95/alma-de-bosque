@@ -1,13 +1,28 @@
 import { STATS } from "../data";
 import { Award, Shield, Timer, Cloud } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   const statIcons = [
     <Award className="text-wood-400 mb-1" size={24} />,
     <Shield className="text-wood-400 mb-1" size={24} />,
     <Timer className="text-wood-400 mb-1" size={24} />,
     <Cloud className="text-wood-400 mb-1" size={24} />
   ];
+
+  const translatedStats = STATS.map((stat, i) => {
+    const labels = [
+      t.about.stats.cabins,
+      t.about.stats.rating,
+      t.about.stats.location,
+      t.about.stats.wifi
+    ];
+    return {
+      value: stat.value,
+      label: labels[i] || stat.label
+    };
+  });
 
   return (
     <section id="about" className="py-24 bg-[#0A0A0A] border-b border-wood-950/20 relative">
@@ -32,7 +47,7 @@ export default function About() {
               
               {/* Floating luxury badge */}
               <div className="absolute bottom-6 left-6 z-20 bg-black/80 backdrop-blur-md px-5 py-3 rounded-lg border border-wood-800/20">
-                <p className="text-xs font-mono text-wood-400 uppercase tracking-widest mb-1">Estate Location</p>
+                <p className="text-xs font-mono text-wood-400 uppercase tracking-widest mb-1">{t.about.badge}</p>
                 <p className="text-sm font-serif text-white font-medium">Circuito Chico, Bariloche</p>
               </div>
             </div>
@@ -62,7 +77,7 @@ export default function About() {
           <div className="col-span-1 lg:col-span-6 flex flex-col justify-center">
             {/* Visual Accent */}
             <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase mb-3">
-              Welcome to Luxury Wilderness
+              {t.about.badge}
             </span>
             
             {/* Title */}
@@ -70,15 +85,15 @@ export default function About() {
               id="about-title"
               className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-6"
             >
-              A Refuge in the Heart of Patagonia
+              {t.about.title}
             </h2>
 
             {/* Context Narrative */}
             <p className="text-zinc-300 font-sans leading-relaxed mb-6">
-              Nestled deep inside the ancient, protected native forest of Bariloche, **Alma del Bosque** offers an exclusive sanctuary where architectural luxury meets the wild, untethered Patagonian environment. Each boutique cabin has been meticulously crafted using local cypress logs and heavy volcanic granite stones, creating a rustic yet heavily refined Patagonian cabin style.
+              {t.about.p1}
             </p>
             <p className="text-zinc-400 font-sans text-sm leading-relaxed mb-8">
-              Here, absolute privacy is guaranteed. Listen to the gentle rustling of the coihue trees, gaze at the immense snow-capped peaks of the Andes, and submerge in your private wood-fired outdoor jacuzzi. Conveniently located just ten minutes from downtown Bariloche, we position you inside pristine isolation while keeping first-rate artisanal chocolatiers, lake ports, and Cerro Catedral ski runs within perfect reach.
+              {t.about.p2}
             </p>
 
             {/* Bento Statistics Grid */}
@@ -86,7 +101,7 @@ export default function About() {
               id="about-stats-grid"
               className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-850/40"
             >
-              {STATS.map((stat, i) => (
+              {translatedStats.map((stat, i) => (
                 <div
                   key={stat.label}
                   id={`stat-card-${i}`}

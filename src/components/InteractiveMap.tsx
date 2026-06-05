@@ -1,9 +1,29 @@
 import { useState } from "react";
 import { MAP_ATTRACTIONS } from "../data";
 import { MapPin, Navigation, Info, Car } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function InteractiveMap() {
+  const { lang, t } = useLanguage();
   const [selectedSpot, setSelectedSpot] = useState(MAP_ATTRACTIONS[4]); // default to Alma del Bosque
+
+  const getTranslatedDistance = (distance: string) => {
+    if (distance === "0 km") return distance;
+    if (lang === "es") {
+      return distance.replace("min", "minutos").replace("minutossos", "minutos");
+    }
+    if (lang === "pt") {
+      return distance.replace("min", "minutos").replace("minutossos", "minutos");
+    }
+    return distance;
+  };
+
+  const getTravelTime = (distance: string) => {
+    const val = parseInt(distance) || 0;
+    if (lang === "es") return `${val} minutos en auto`;
+    if (lang === "pt") return `${val} minutos de carro`;
+    return `${val} minutes by car`;
+  };
 
   return (
     <section id="map-section" className="py-24 bg-[#0A0A0A] border-b border-wood-950/20 relative">
@@ -12,13 +32,13 @@ export default function InteractiveMap() {
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase block mb-3">
-            Patagonian Coordinates
+            {t.map.badge}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            Where We Are located
+            {t.map.title}
           </h2>
           <p className="text-zinc-400 font-sans text-sm md:text-base">
-            Secluded in protected tranquility inside Circuito Chico, yet positioned right near the major attractions, ski slopes, and airport hubs of San Carlos de Bariloche.
+            {t.map.subtitle}
           </p>
         </div>
 
@@ -28,8 +48,8 @@ export default function InteractiveMap() {
           {/* Left Panel: Attractions List & Detail Widget */}
           <div className="col-span-1 lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="bg-zinc-900/30 border border-wood-850/10 p-6 rounded-2xl flex flex-col space-y-4">
-              <span className="text-[10px] tracking-widest font-mono text-zinc-500 uppercase block">
-                Local Attraction Navigator
+              <span className="text-[10px] tracking-widest font-mono text-zinc-550 uppercase block">
+                {t.map.navTitle}
               </span>
               
               {/* Attraction Button List */}
@@ -51,16 +71,20 @@ export default function InteractiveMap() {
                         className={spot.isCore ? "text-forest-400 fill-forest-400" : "text-wood-400"}
                       />
                       <div>
-                        <span className="text-sm font-medium block leading-tight">{spot.name}</span>
-                        <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">{spot.type}</span>
+                        <span className="text-sm font-medium block leading-tight">{spot.name === "Alma del Bosque" ? "Alma del Bosque" : spot.name}</span>
+                        <span className="text-[9px] font-mono tracking-wider text-zinc-500 uppercase">
+                          {t.map.types[spot.type] || spot.type}
+                        </span>
                       </div>
                     </div>
                     {spot.isCore ? (
                       <span className="text-[8px] tracking-widest bg-forest-950 border border-forest-500/20 px-2 py-0.5 rounded font-mono uppercase text-forest-300">
-                        Our Lodge
+                        {t.map.ourLodge}
                       </span>
                     ) : (
-                      <span className="text-xs font-mono text-wood-500">{spot.distance} away</span>
+                      <span className="text-xs font-mono text-wood-500">
+                        {getTranslatedDistance(spot.distance)} {t.map.away}
+                      </span>
                     )}
                   </button>
                 ))}
@@ -77,19 +101,19 @@ export default function InteractiveMap() {
                 </div>
                 <div className="space-y-2 flex-grow">
                   <span className="text-[9px] font-mono tracking-widest text-wood-400 uppercase">
-                    Attraction Details
+                    {t.map.detailsTitle}
                   </span>
                   <h3 className="font-serif text-lg font-medium text-white">
                     {selectedSpot.name}
                   </h3>
                   <p className="text-zinc-450 text-xs leading-relaxed font-sans">
-                    {selectedSpot.description}
+                    {t.map.data[selectedSpot.name]?.description || selectedSpot.description}
                   </p>
                   
                   {!selectedSpot.isCore && (
                     <div className="pt-2 flex items-center gap-2 text-[11px] font-mono text-zinc-400">
                       <Car size={13} className="text-wood-500" />
-                      <span>Estimated travel time: {parseInt(selectedSpot.distance) * 2} minutes by car</span>
+                      <span>{t.map.travelTime}: {getTravelTime(selectedSpot.distance)}</span>
                     </div>
                   )}
                 </div>
@@ -115,7 +139,7 @@ export default function InteractiveMap() {
             {/* Overlay badge to remind user of the actual location */}
             <div className="absolute bottom-4 right-4 bg-black/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-800 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-forest-400" />
-              <span className="text-xs text-white font-mono uppercase tracking-wider">Map Loaded Offline-Secure</span>
+              <span className="text-xs text-white font-mono uppercase tracking-wider">{t.map.loaded}</span>
             </div>
           </div>
 

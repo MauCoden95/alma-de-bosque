@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { CABINS_DATA } from "../data";
-import { Calendar, Users, Briefcase, FileText, CheckCircle2, DollarSign, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { Calendar, Briefcase, FileText, CheckCircle2, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface BookingFormProps {
   prefilledParams: {
@@ -22,6 +23,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
   const [guests, setGuests] = useState(2);
   const [selectedCabinId, setSelectedCabinId] = useState(CABINS_DATA[0].id);
   const [specialRequests, setSpecialRequests] = useState("");
+  const { t } = useLanguage();
   
   // Submit state
   const [isSuccess, setIsSuccess] = useState(false);
@@ -84,7 +86,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
 
     if (error) {
       console.error("[Supabase] Booking insert error:", error);
-      setSubmitError("There was an error submitting your booking. Please try again.");
+      setSubmitError(t.booking.submitError);
       return;
     }
 
@@ -112,13 +114,13 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-mono tracking-[0.3em] text-wood-500 uppercase block mb-3">
-            Secure Booking Engine
+            {t.booking.badge}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            Book Your Retreat
+            {t.booking.title}
           </h2>
           <p className="text-zinc-400 font-sans text-sm md:text-base">
-            Configure your stay, calculate your pricing summary in real time, and summon a dedicated Patagonian guest coordinator.
+            {t.booking.subtitle}
           </p>
         </div>
 
@@ -133,42 +135,42 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
             </div>
             
             <h3 className="font-serif text-2xl md:text-3xl text-white font-semibold mb-4">
-              Your Booking Request is Verified
+              {t.booking.successTitle}
             </h3>
             
             <div className="inline-block bg-black px-6 py-2.5 rounded-lg border border-wood-800/20 mb-8">
-              <span className="block text-[9px] tracking-widest font-mono text-zinc-500 uppercase">Reservation Reference</span>
+              <span className="block text-[9px] tracking-widest font-mono text-zinc-500 uppercase">{t.booking.refLabel}</span>
               <span className="block text-lg font-mono text-wood-400 font-bold">{bookingCode}</span>
             </div>
 
             <div className="text-left space-y-4 max-w-lg mx-auto bg-black/40 border border-zinc-850 p-6 rounded-xl mb-8 text-zinc-300 text-xs sm:text-sm">
               <div className="flex justify-between border-b border-zinc-850 pb-2.5">
-                <span className="text-zinc-500 font-sans">Lead Guest:</span>
+                <span className="text-zinc-500 font-sans">{t.booking.leadGuest}:</span>
                 <span className="text-white font-semibold">{fullName}</span>
               </div>
               <div className="flex justify-between border-b border-zinc-850 pb-2.5">
-                <span className="text-zinc-500 font-sans">Cabin Choice:</span>
+                <span className="text-zinc-500 font-sans">{t.booking.cabinChoice}:</span>
                 <span className="text-white font-semibold">{selectedCabin.name}</span>
               </div>
               <div className="flex justify-between border-b border-zinc-850 pb-2.5">
-                <span className="text-zinc-500 font-sans">Stays Duration:</span>
-                <span className="text-white font-semibold">{arrivalDate} to {departureDate} ({nights} {nights === 1 ? 'night' : 'nights'})</span>
+                <span className="text-zinc-500 font-sans">{t.booking.duration}:</span>
+                <span className="text-white font-semibold">{arrivalDate} â€“ {departureDate} ({nights} {nights === 1 ? t.booking.night : t.booking.nights})</span>
               </div>
               <div className="flex justify-between font-serif text-base pt-1">
-                <span className="text-wood-400 font-semibold">Total Price:</span>
+                <span className="text-wood-400 font-semibold">{t.booking.totalPrice}:</span>
                 <span className="text-wood-400 font-bold">${totalAmount.toLocaleString()} USD</span>
               </div>
             </div>
 
             <p className="text-zinc-400 text-sm max-w-xl mx-auto mb-8 leading-relaxed">
-              We have dispatched your requested details to our guest host at Alma del Bosque. A coordinate response will be sent to <strong>{email}</strong> or WhatsApp within 2 hours to confirm checking requirements and luxury transfer arrangements.
+              {t.booking.successMsg.replace("{email}", email)}
             </p>
 
             <button
               onClick={handleReset}
               className="px-6 py-3 bg-wood-500 hover:bg-wood-400 text-black font-semibold rounded uppercase tracking-wider text-xs transition-transform cursor-pointer"
             >
-              Book Another Session
+              {t.booking.anotherBtn}
             </button>
           </div>
         ) : (
@@ -182,17 +184,17 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                 {/* Personal Information Group */}
                 <div className="space-y-4">
                   <span className="text-[10px] tracking-widest font-mono text-wood-550 uppercase block border-b border-zinc-900 pb-2">
-                    1. Contact Details
+                    {t.booking.c1_title}
                   </span>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                      <label htmlFor="book-full-name" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Full Name</label>
+                      <label htmlFor="book-full-name" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.fullNameLabel}</label>
                       <input
                         id="book-full-name"
                         type="text"
                         required
-                        placeholder="John Doe"
+                        placeholder={t.booking.fullNamePlaceholder}
                         className="bg-black/60 border border-zinc-800/80 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
@@ -200,12 +202,12 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                     </div>
                     
                     <div className="flex flex-col">
-                      <label htmlFor="book-email" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Email Address</label>
+                      <label htmlFor="book-email" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.emailLabel}</label>
                       <input
                         id="book-email"
                         type="email"
                         required
-                        placeholder="john@example.com"
+                        placeholder={t.booking.emailPlaceholder}
                         className="bg-black/60 border border-zinc-800/80 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -214,12 +216,12 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                   </div>
 
                   <div className="flex flex-col">
-                    <label htmlFor="book-phone" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Phone / WhatsApp Number</label>
+                    <label htmlFor="book-phone" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.phoneLabel}</label>
                     <input
                       id="book-phone"
                       type="tel"
                       required
-                      placeholder="+54 9 11 1234-5678"
+                      placeholder={t.booking.phonePlaceholder}
                       className="bg-black/60 border border-zinc-800/80 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -230,12 +232,12 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                 {/* Logistical Parameters Group */}
                 <div className="space-y-4 pt-2">
                   <span className="text-[10px] tracking-widest font-mono text-wood-550 uppercase block border-b border-zinc-900 pb-2">
-                    2. Lodge Specifics
+                    {t.booking.c2_title}
                   </span>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                      <label htmlFor="book-arrival" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Arrival Date (Check-in)</label>
+                      <label htmlFor="book-arrival" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.arrivalLabel}</label>
                       <input
                         id="book-arrival"
                         type="date"
@@ -247,7 +249,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                     </div>
                     
                     <div className="flex flex-col">
-                      <label htmlFor="book-departure" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Departure Date (Check-out)</label>
+                      <label htmlFor="book-departure" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.departureLabel}</label>
                       <input
                         id="book-departure"
                         type="date"
@@ -261,7 +263,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                      <label htmlFor="book-cabin-type" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Select Cabin Type</label>
+                      <label htmlFor="book-cabin-type" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.cabinTypeLabel}</label>
                       <select
                         id="book-cabin-type"
                         className="bg-black/60 border border-zinc-800/100 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors cursor-pointer"
@@ -270,14 +272,14 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                       >
                         {CABINS_DATA.map((cabin) => (
                           <option key={cabin.id} value={cabin.id} className="bg-zinc-900 text-white">
-                            {cabin.name} — (${cabin.price}/night)
+                            {cabin.name} â€” (${cabin.price}/{t.booking.night})
                           </option>
                         ))}
                       </select>
                     </div>
 
                     <div className="flex flex-col">
-                      <label htmlFor="book-guests-count" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Number of Guests</label>
+                      <label htmlFor="book-guests-count" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.guestsCountLabel}</label>
                       <select
                         id="book-guests-count"
                         className="bg-black/60 border border-zinc-800/100 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors cursor-pointer"
@@ -286,7 +288,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                       >
                         {Array.from({ length: selectedCabin.capacity }).map((_, i) => (
                           <option key={i + 1} value={i + 1} className="bg-zinc-900 text-white">
-                            {i + 1} {i + 1 === 1 ? "Guest" : "Guests"} (Max {selectedCabin.capacity})
+                            {i + 1} {i + 1 === 1 ? t.booking.guest : t.booking.guests} ({t.booking.maxGuests} {selectedCabin.capacity})
                           </option>
                         ))}
                       </select>
@@ -297,13 +299,13 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                 {/* Additional Comments Group */}
                 <div className="flex flex-col pt-2">
                   <span className="text-[10px] tracking-widest font-mono text-wood-550 uppercase block border-b border-zinc-900 pb-2 mb-4">
-                    3. Additional Comments
+                    {t.booking.c3_title}
                   </span>
-                  <label htmlFor="book-special" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">Special Requests & Services</label>
+                  <label htmlFor="book-special" className="text-xs text-zinc-400 font-sans mb-1.5 font-medium">{t.booking.specialLabel}</label>
                   <textarea
                     id="book-special"
                     rows={4}
-                    placeholder="Mention pet setups, private transfers, firewood replacements, dietary needs or customized excursions."
+                    placeholder={t.booking.specialPlaceholder}
                     className="bg-black/60 border border-zinc-850/80 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-wood-500 transition-colors resize-none"
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
@@ -324,9 +326,9 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                   className="w-full py-4 bg-wood-500 hover:bg-wood-400 disabled:opacity-60 disabled:cursor-not-allowed text-black font-bold uppercase tracking-widest text-xs rounded-md transition-colors shadow-lg flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isLoading ? (
-                    <><Loader2 size={14} className="animate-spin" /> Processing... </>
+                    <><Loader2 size={14} className="animate-spin" /> {t.booking.processing}</>
                   ) : (
-                    <>Send Booking Request <ArrowRight size={14} /></>
+                    <>{t.booking.submitBtn} <ArrowRight size={14} /></>
                   )}
                 </button>
 
@@ -336,7 +338,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
             {/* Right Col: Interactive Cost Estimator Summary */}
             <div className="lg:col-span-5 bg-zinc-900/40 border border-wood-850/10 rounded-2xl p-6 md:p-8 space-y-6">
               <span className="text-[10px] tracking-widest font-mono text-zinc-550 uppercase block">
-                Stay Pricing Summary
+                {t.booking.pricingSummary}
               </span>
               
               {/* Selected Cabin Quick card preview */}
@@ -349,8 +351,8 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                 />
                 <div>
                   <h4 className="font-serif text-sm font-semibold text-white uppercase tracking-wider">{selectedCabin.name}</h4>
-                  <p className="text-xs text-zinc-400 font-mono mt-1 mt-0.5">Base Fare: ${selectedCabin.price} / night</p>
-                  <p className="text-[10px] text-wood-400 tracking-wide font-mono mt-0.5 uppercase">Capacity: Up to {selectedCabin.capacity} guests</p>
+                  <p className="text-xs text-zinc-400 font-mono mt-1 mt-0.5">{t.booking.baseFare}: ${selectedCabin.price} / {t.booking.night}</p>
+                  <p className="text-[10px] text-wood-400 tracking-wide font-mono mt-0.5 uppercase">{t.cabins.capacity}: {t.booking.maxGuests} {selectedCabin.capacity} {t.booking.guests}</p>
                 </div>
               </div>
 
@@ -359,28 +361,28 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                 {nights >= 1 ? (
                   <>
                     <div className="flex justify-between text-zinc-400">
-                      <span>Rate Calculation:</span>
-                      <span className="font-mono text-white">${selectedCabin.price} x {nights} {nights === 1 ? 'night' : 'nights'}</span>
+                      <span>{t.booking.rateCalculation}:</span>
+                      <span className="font-mono text-white">${selectedCabin.price} x {nights} {nights === 1 ? t.booking.night : t.booking.nights}</span>
                     </div>
                     <div className="flex justify-between text-zinc-400 border-b border-zinc-850 pb-3">
-                      <span>Subtotal:</span>
+                      <span>{t.booking.subtotal}:</span>
                       <span className="font-mono text-white">${subtotal.toLocaleString()} USD</span>
                     </div>
                     <div className="flex justify-between text-zinc-400">
-                      <span>Patagonian IVA/VAT (21%):</span>
+                      <span>{t.booking.taxLabel}:</span>
                       <span className="font-mono text-white">${taxAmount.toLocaleString()} USD</span>
                     </div>
                     <div className="flex justify-between text-zinc-400 border-b border-zinc-850 pb-3">
-                      <span>Local Resort Tourism Levy:</span>
-                      <span className="font-mono text-forest-400">Complimentary</span>
+                      <span>{t.booking.levyLabel}:</span>
+                      <span className="font-mono text-forest-400">{t.booking.levyFree}</span>
                     </div>
                     
                     {/* Final Grand Total highlight */}
                     <div className="flex justify-between items-baseline font-serif text-lg pt-2">
-                      <span className="text-white font-semibold">Total Estimated cost:</span>
+                      <span className="text-white font-semibold">{t.booking.totalEstCost}:</span>
                       <div className="text-right">
                         <span className="text-wood-400 font-bold block">${totalAmount.toLocaleString()} USD</span>
-                        <span className="text-[8px] font-mono tracking-widest text-zinc-550 block uppercase mt-0.5">including all taxes</span>
+                        <span className="text-[8px] font-mono tracking-widest text-zinc-550 block uppercase mt-0.5">{t.booking.taxIncluded}</span>
                       </div>
                     </div>
                   </>
@@ -391,8 +393,8 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
                       <Calendar size={16} />
                     </div>
                     <div>
-                      <p className="font-semibold text-zinc-300 text-xs">Awaiting Stay Schedule</p>
-                      <p className="text-[10px] text-zinc-500 mt-1">Please configure your arrival and departure dates on the form to compute complete tax calculations and total rates.</p>
+                      <p className="font-semibold text-zinc-300 text-xs">{t.booking.awaitingTitle}</p>
+                      <p className="text-[10px] text-zinc-500 mt-1">{t.booking.awaitingMsg}</p>
                     </div>
                   </div>
                 )}
@@ -401,7 +403,7 @@ export default function BookingForm({ prefilledParams, onClearPrefills }: Bookin
               {/* Trust Badge */}
               <div className="bg-black/60 border border-zinc-850 rounded-xl p-4 flex items-center gap-3.5 text-[10px] text-zinc-400 leading-normal">
                 <Briefcase size={16} className="text-[#999] flex-shrink-0" />
-                <p>Alma del Bosque guarantees premium rates, zero concealed resort commissions, and customized butler schedules for booking direct.</p>
+                <p>{t.booking.guarantee}</p>
               </div>
 
             </div>
