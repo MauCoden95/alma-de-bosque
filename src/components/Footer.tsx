@@ -41,10 +41,10 @@ export default function Footer({ onNavigate }: FooterProps) {
               onClick={() => onNavigate("home")}
               className="text-left flex flex-col cursor-pointer group"
             >
-              <span className="font-serif text-2xl font-semibold tracking-wide text-white group-hover:text-wood-400 transition-colors">
+              <span className="font-serif text-2xl font-semibold tracking-wide text-white group-hover:text-wood-400 transition-colors whitespace-nowrap">
                 Alma del Bosque
               </span>
-              <span className="text-[10px] tracking-[0.2em] font-mono text-wood-500 uppercase mt-0.5">
+              <span className="text-[10px] tracking-[0.2em] font-mono text-wood-500 uppercase mt-0.5 whitespace-nowrap">
                 Bariloche · Patagonia
               </span>
             </button>
